@@ -78,7 +78,7 @@ int	ft_add_remainder(char **p_line, char **p_remainder)
 		return (1);
 	*p_line = ft_strndup(*p_remainder, ft_strlen(*p_remainder));
 	if (!*p_line)
-		return (free(*p_remainder), 0);
+		return (free(*p_remainder), *p_remainder = NULL, 0);
 	free(*p_remainder);
 	*p_remainder = NULL;
 	return (1);
