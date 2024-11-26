@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chdonnat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/15 14:54:43 by chdonnat          #+#    #+#             */
+/*   Updated: 2024/11/15 14:55:15 by chdonnat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 size_t	ft_strlen(const char *str)
@@ -10,73 +22,66 @@ size_t	ft_strlen(const char *str)
 	return (len);
 }
 
-int	ft_has_newline(t_list *stash)
+char	*ft_strndup(const char *s, size_t len)
 {
-	int		i;
-	t_list	*current;
+	char	*dup;
+	size_t	i;
 
-	if (!stash)
-		return (0);
-	current = ft_lst_get_last(stash);
+	dup = (char *)malloc(len + 1);
+	if (!dup)
+		return (NULL);
 	i = 0;
-	while (current->content[i])
+	while (i < len)
 	{
-		if (current->content[i] == '\n')
-			return (1);
+		dup[i] = s[i];
 		i++;
 	}
-	return (0);
+	dup[len] = '\0';
+	return (dup);
 }
 
-void	ft_free_stash(t_list *stash)
+char	*ft_strchr(const char *s, int c)
 {
-	t_list	*current;
-	t_list	*next;
+	size_t			i;
+	size_t			len;
+	unsigned char	uc;
 
-	current = stash;
-	while (current)
-	{
-		free(current->content);
-		next = current->next;
-		free(current);
-		current = next;
-	}
-}
-
-t_list	*ft_lst_get_last(t_list *stash)
-{
-	t_list	*current;
-
-	current = stash;
-	while(current && current->next)
-		current = current->next;
-	return (current);
-}
-
-void	ft_clean_list(t_list	**p_stash)
-{
-	t_list	*last;
-	t_list	*clean_node;
-	int i;
-	int	j;
-
-	clean_node = (t_list *) malloc(sizeof(t_list));
-	if (!(*p_stash) || !clean_node)
-		return ;
-	clean_node->next = NULL;
-	last = ft_lst_get_last(*p_stash);
+	len = ft_strlen(s);
+	uc = (unsigned char) c;
 	i = 0;
-	while (last->content[i] && last->content[i] != '\n')
+	while (i <= len)
+	{
+		if ((unsigned char) s[i] == uc)
+			return ((char *) &s[i]);
 		i++;
-	if (last->content && last->content[i] == '\n')
+	}
+	return (NULL);
+}
+
+char	*ft_strjoin(char *s1, const char *s2)
+{
+	size_t	len1;
+	char	*result;
+	size_t	i;
+	size_t	j;
+
+	if (s1)
+		len1 = ft_strlen(s1);
+	else
+		len1 = 0;
+	result = (char *) malloc(len1 + ft_strlen(s2) + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (i < len1)
+	{
+		result[i] = s1[i];
 		i++;
-	clean_node->content = (char *) malloc((ft_strlen(last->content) - i) + 1);
-	if (!(clean_node->content))
-		return ;
+	}
 	j = 0;
-	while (last->content[i])
-		clean_node->content[j++] = last->content[i++];
-	clean_node->content[j] = '\0';
-	ft_free_stash(*p_stash);
-	*p_stash = clean_node;
+	while (j < ft_strlen(s2))
+	{
+		result[i++] = s2[j++];
+	}
+	return (result[i + j] = '\0', result);
 }
