@@ -80,8 +80,7 @@ char	*ft_strjoin(char *s1, const char *s2)
 	}
 	j = 0;
 	while (j < ft_strlen(s2))
-	{
 		result[i++] = s2[j++];
-	}
-	return (result[i + j] = '\0', result);
+	result[i + j] = '\0';
+	return (result);
 }
